@@ -1,6 +1,5 @@
 import { NFTType } from "../type";
 import useGlobalState from "../store";
-import React from "react";
 const Card = ({ nft }: { nft: NFTType }) => {
     const { setGlobalState } = useGlobalState();
     const setNFT = () => {

@@ -16,7 +16,6 @@ const SellNFT = () => {
   const [allNFTs, setAllNFTs] = useState<NFTType[]>([]);
 
   const {
-    provider,
     connectedAccount,
   }: { provider: any; connectedAccount: string } = useGlobalState();
 
@@ -47,10 +46,12 @@ const SellNFT = () => {
         try {
           while (true) {
             let tokenURI = await NFTContract.methods.tokenURI(tokenId).call();
+            const tokenURIString = String(tokenURI);
             const getOwner = await NFTContract.methods.ownerOf(tokenId).call();
-            const owner = getOwner.toLowerCase();
+            const owner = String(getOwner).toLowerCase();
+          
             if (owner == connectedAccount) {
-              const response = await fetch(tokenURI);
+              const response = await fetch(tokenURIString);
               const metadataURI = await response.json();
               const NFT: NFTType = {
                 id: tokenId,

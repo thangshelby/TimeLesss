@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { BiTransfer } from "react-icons/bi";
 import { MdOpenInNew } from "react-icons/md";
 import { truncate } from "../utils";

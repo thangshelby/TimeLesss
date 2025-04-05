@@ -1,9 +1,8 @@
 import useGlobalState from "../store";
 import { truncate } from "../utils";
 import BlockiesAvatar from "./BlockiesAvatart";
-import React from "react";
 const Hero = () => {
-  const { connectedAccount, alert, setGlobalState } = useGlobalState();
+  const { connectedAccount,  setGlobalState } = useGlobalState();
   const onCreatedNFT = () => {
     if (!connectedAccount) {
       setGlobalState({

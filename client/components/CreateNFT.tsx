@@ -1,5 +1,5 @@
 import useGlobalState from "../store";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { uploadImageToPinata } from "../utils";
 import marketAbi from "../abis/TimeLess.json";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, CSSProperties } from "react";
+import  { useEffect, useState, CSSProperties } from "react";
 import CircleLoader from "react-spinners/CircleLoader";
 const override: CSSProperties = {
   display: "block",

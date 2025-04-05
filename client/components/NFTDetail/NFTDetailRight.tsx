@@ -5,10 +5,7 @@ import useGlobalState from "../../store";
 import { FaEye } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
 import { formatDate } from "../../utils";
-import { MdRemoveShoppingCart } from "react-icons/md";
-import { MdShoppingCart } from "react-icons/md";
 
-import { TbDiscount, TbRosetteDiscountOff } from "react-icons/tb";
 import Web3 from "web3";
 import marketAbi from "../../abis/TimeLess.json";
 const NFTDetailRight = () => {
