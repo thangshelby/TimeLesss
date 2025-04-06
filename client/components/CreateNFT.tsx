@@ -52,34 +52,30 @@ const CreateNFT = () => {
         const NFTContract = new web3.eth.Contract(
           nftAbi,
           "0x5CF3e214FD40F287F6Bf4efAc643CC6f6fF2F16e"
-        );
-
-        await NFTContract.methods
-          .awardItem(accounts[0], metadataURI)
-          .send({ from: accounts[0] });
-
-        let tokenId = 0;
+        );  
+        let tokenId = 1 ;
 
         try {
           while (true) {
-            let tokenURI = await NFTContract.methods.tokenURI(tokenId).call();
-            console.log(`Token ID: ${tokenId}, URI: ${tokenURI}`);
+            await NFTContract.methods.tokenURI(tokenId).call();
+            // console.log(`Token ID: ${tokenId}, URI: ${tokenURI}`);
             tokenId += 1;
           }
         } catch (error) {
           console.log("Không còn NFT nào nữa hoặc lỗi xảy ra:", error);
         }
-        console.log(tokenId);
-        console.log("Token ID:", tokenId);
+  
+        await NFTContract.methods
+          .awardItem(accounts[0], metadataURI)
+          .send({ from: accounts[0] });
 
         const marketContract = new web3.eth.Contract(
           marketAbi,
           "0x326611fce71580864D4173830cB5D86409f13B71"
         );
 
-        console.log(tokenId, marketContract);
         const response = await marketContract.methods
-          .activeForSale(17, 10, 0, 10000000000)
+          .activeForSale(tokenId, 10, 0, 10000000000)
           .send({ from: accounts[0] });
         console.log(response);
       }

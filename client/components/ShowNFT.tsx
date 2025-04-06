@@ -1,12 +1,11 @@
 import { FaTimes } from "react-icons/fa";
 import useGlobalState from "../store";
-import { truncate } from "../utils"
+import { truncate } from "../utils";
 import BlockiesAvatar from "./BlockiesAvatart";
-// import Web3 from "web3";
-// import marketAbi from "../abis/TimeLess.json";
+import Web3 from "web3";
+import marketAbi from "../abis/TimeLess.json";
 const ShowNFT = () => {
-  const { showModal, connectedAccount, nft, setGlobalState} =
-    useGlobalState();
+  const { showModal, connectedAccount, nft, setGlobalState } = useGlobalState();
 
   const onChangePrice = () => {
     setGlobalState({ updateModal: "scale-100", showModal: "scale-0" });
@@ -18,21 +17,17 @@ const ShowNFT = () => {
       loading: { show: true, msg: "Initializing NFT transfer..." },
     });
     try {
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(
+        marketAbi,
+        "0x326611fce71580864D4173830cB5D86409f13B71"
+      );
+      await contract.methods.payToBuy(nft?.id).send({
+        from: connectedAccount,
+        value: web3.utils.toWei(`${nft?.cost! * 1e18}`, "wei"),
+        gas: "3000000",
+      });
 
-      // const web3 = new Web3(window.ethereum);
-      // const contract = new web3.eth.Contract(
-      //   marketAbi,
-      //   "0x326611fce71580864D4173830cB5D86409f13B71"
-      // );
-      // console.log("NFT ID:", nft?.id);
-      // const butNFT = await contract.methods
-      //   .payToBuy(nft?.id)
-      //   .send({
-      //     from: connectedAccount,
-      //     value: web3.utils.toWei(`${nft?.cost!*1e18}`, "wei"),
-      //     gas: '3000000',
-      //   });
-   
       setGlobalState({
         alert: { show: true, msg: "Transfer completed...", color: "green" },
       });

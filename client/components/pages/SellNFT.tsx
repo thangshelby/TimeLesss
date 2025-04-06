@@ -44,7 +44,6 @@ const SellNFT = () => {
 
         const allNFTs: { owner: string; metadataURI: string; id: any,cost:any }[] =
           (await contract.methods.getAllNFTForSale().call()) || [];
-        console.log(allNFTs);
         for (let i = 0; i < allNFTs.length; i++) {
           const response = await fetch(`${allNFTs[i].metadataURI!}`);
           const nft = await response.json();
