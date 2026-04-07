@@ -1,15 +1,16 @@
-import Web3 from "web3";
 import useGlobalState from "../store";
 import { truncate } from "../utils";
 declare global {
   interface Window {
     ethereum: any;
-    web3: Web3;
   }
 }
 
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
   const { connectedAccount, setGlobalState } = useGlobalState();
+  const navigate = useNavigate();
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -55,7 +56,7 @@ const Header = () => {
         <li
           className="mx-8 cursor-pointer"
           onClick={() => {
-            setGlobalState({ page: "home" });
+            navigate("/");
           }}
         >
           Market
@@ -63,7 +64,7 @@ const Header = () => {
         <li
           className="mx-8 cursor-pointer"
           onClick={() => {
-            setGlobalState({ page: "sell" });
+            navigate("/sell");
           }}
         >
           NFTs On Sell
@@ -71,7 +72,7 @@ const Header = () => {
         <li
           className="mx-8 cursor-pointer"
           onClick={() => {
-            setGlobalState({ page: "auction" });
+            navigate("/auction");
           }}
         >
           NFTs On Auction
@@ -79,7 +80,7 @@ const Header = () => {
         <li
           className="mx-8 cursor-pointer"
           onClick={() => {
-            setGlobalState({ page: "myNFT" });
+            navigate("/myNFT");
           }}
         >
           My collection

@@ -6,7 +6,7 @@ import { FaEye } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
 import { formatDate } from "../../utils";
 
-import Web3 from "web3";
+import { ethers } from "ethers";
 import marketAbi from "../../abis/TimeLess.json";
 const NFTDetailRight = () => {
   const { nft, connectedAccount, setGlobalState } = useGlobalState();
@@ -18,17 +18,17 @@ const NFTDetailRight = () => {
   const handleActiveNFTForSale = async () => {
     console.log("Active NFT for sale");
     if (window.ethereum) {
-      const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(
+        "0x326611fce71580864D4173830cB5D86409f13B71",
         marketAbi,
-        "0x326611fce71580864D4173830cB5D86409f13B71"
+        signer
       );
 
-      const response = await contract.methods
-        .activeForSale(nft?.id, nft?.cost, 0, 100000000)
-        .send({
-          from: connectedAccount,
-        });
+      const weiCost = ethers.parseEther(nft?.cost?.toString() || "0");
+      const response = await contract.activeForSale(nft?.id, weiCost, 0, 100000000);
+      await response.wait();
 
       console.log("Response:", response);
     }

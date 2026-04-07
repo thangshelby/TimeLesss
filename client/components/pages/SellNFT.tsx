@@ -1,6 +1,6 @@
 import React, {  useState, CSSProperties } from "react";
 import CircleLoader from "react-spinners/CircleLoader";
-import Web3 from "web3";
+import { ethers } from "ethers";
 import marketAbi from "../../abis/TimeLess.json";
 import Card from "../Card";
 const override: CSSProperties = {
@@ -34,16 +34,17 @@ const SellNFT = () => {
   React.useEffect(() => {
     const getAllNfts = async () => {
       if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
+        const provider = new ethers.BrowserProvider(window.ethereum);
 
         // Lấy contract NFT
-        const contract = new web3.eth.Contract(
+        const contract = new ethers.Contract(
+          "0x326611fce71580864D4173830cB5D86409f13B71",
           marketAbi,
-          "0x326611fce71580864D4173830cB5D86409f13B71"
+          provider
         );
 
         const allNFTs: { owner: string; metadataURI: string; id: any,cost:any }[] =
-          (await contract.methods.getAllNFTForSale().call()) || [];
+          (await contract.getAllNFTForSale()) || [];
         for (let i = 0; i < allNFTs.length; i++) {
           const response = await fetch(`${allNFTs[i].metadataURI!}`);
           const nft = await response.json();

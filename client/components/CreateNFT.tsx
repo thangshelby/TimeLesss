@@ -6,7 +6,7 @@ import marketAbi from "../abis/TimeLess.json";
 import nftAbi from "../abis/TimeLessNFT.json";
 import { CiImageOn } from "react-icons/ci";
 import pinataSDK from "@pinata/sdk";
-import Web3 from "web3";
+import { ethers } from "ethers";
 const pinata = new pinataSDK(
   "1613dd607713ee1ec445",
   "1a51df876d1b1a897a6ce05b6fa83b15e954a62ebd980e151862b45b2c145dc8"
@@ -43,21 +43,19 @@ const CreateNFT = () => {
       setGlobalState({ loading: { show: true, msg: "Creating NFT.." } });
 
       if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
 
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-
-        const NFTContract = new web3.eth.Contract(
+        const NFTContract = new ethers.Contract(
+          "0x5CF3e214FD40F287F6Bf4efAc643CC6f6fF2F16e",
           nftAbi,
-          "0x5CF3e214FD40F287F6Bf4efAc643CC6f6fF2F16e"
+          signer
         );  
         let tokenId = 1 ;
 
         try {
           while (true) {
-            await NFTContract.methods.tokenURI(tokenId).call();
+            await NFTContract.tokenURI(tokenId);
             // console.log(`Token ID: ${tokenId}, URI: ${tokenURI}`);
             tokenId += 1;
           }
@@ -65,18 +63,17 @@ const CreateNFT = () => {
           console.log("Không còn NFT nào nữa hoặc lỗi xảy ra:", error);
         }
   
-        await NFTContract.methods
-          .awardItem(accounts[0], metadataURI)
-          .send({ from: accounts[0] });
+        const tx1 = await NFTContract.awardItem(signer.address, metadataURI);
+        await tx1.wait();
 
-        const marketContract = new web3.eth.Contract(
+        const marketContract = new ethers.Contract(
+          "0x326611fce71580864D4173830cB5D86409f13B71",
           marketAbi,
-          "0x326611fce71580864D4173830cB5D86409f13B71"
+          signer
         );
 
-        const response = await marketContract.methods
-          .activeForSale(tokenId, 10, 0, 10000000000)
-          .send({ from: accounts[0] });
+        const response = await marketContract.activeForSale(tokenId, 10, 0, 10000000000);
+        await response.wait();
         console.log(response);
       }
 

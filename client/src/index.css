@@ -13,6 +13,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #151c25;
 }
 
 .gradient-bg-hero {
@@ -50,6 +51,7 @@ body {
 .text-gradient {
   background: -webkit-linear-gradient(#eee, #333);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

@@ -2,7 +2,7 @@ import { FaTimes } from "react-icons/fa";
 import useGlobalState from "../store";
 import { truncate } from "../utils";
 import BlockiesAvatar from "./BlockiesAvatart";
-import Web3 from "web3";
+import { ethers } from "ethers";
 import marketAbi from "../abis/TimeLess.json";
 const ShowNFT = () => {
   const { showModal, connectedAccount, nft, setGlobalState } = useGlobalState();
@@ -17,16 +17,18 @@ const ShowNFT = () => {
       loading: { show: true, msg: "Initializing NFT transfer..." },
     });
     try {
-      const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(
+        "0x326611fce71580864D4173830cB5D86409f13B71",
         marketAbi,
-        "0x326611fce71580864D4173830cB5D86409f13B71"
+        signer
       );
-      await contract.methods.payToBuy(nft?.id).send({
-        from: connectedAccount,
-        value: web3.utils.toWei(`${nft?.cost! * 1e18}`, "wei"),
-        gas: "3000000",
+      const tx = await contract.payToBuy(nft?.id, {
+        value: ethers.parseEther(nft?.cost?.toString() || "0"),
+        gasLimit: 3000000,
       });
+      await tx.wait();
 
       setGlobalState({
         alert: { show: true, msg: "Transfer completed...", color: "green" },

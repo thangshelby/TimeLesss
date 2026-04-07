@@ -9,21 +9,22 @@ import Transactions from "../components/Transactions";
 import UpdateNFT from "../components/UpdateNFT";
 import {SellNFT,Artworks} from "../components/pages";
 import NFTDetail from "../components/NFTDetail/NFTDetail";
-import useGlobalState from "../store";
 import MyNFT from "../components/pages/MyNFT";
+import { Routes, Route } from "react-router-dom";
+
 function App() {
-  const { page } = useGlobalState();
   return (
     <div className="min-h-screen">
       <div className="gradient-bg-hero">
         <Header />
         <Hero />
       </div>
-      {page === "home" && <Artworks />}
-      {page === "sell" && <SellNFT />}
-      {page==='myNFT' && <MyNFT />}
-      {page === "detail" && <NFTDetail />}
-      {/* <Artworks /> */}
+      <Routes>
+        <Route path="/" element={<Artworks />} />
+        <Route path="/sell" element={<SellNFT />} />
+        <Route path="/myNFT" element={<MyNFT />} />
+        <Route path="/detail" element={<NFTDetail />} />
+      </Routes>
 
       <Transactions />
       <CreateNFT />

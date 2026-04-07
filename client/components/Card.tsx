@@ -1,10 +1,14 @@
 import { NFTType } from "../type";
 import useGlobalState from "../store";
+import { useNavigate } from "react-router-dom";
+
 const Card = ({ nft }: { nft: NFTType }) => {
     const { setGlobalState } = useGlobalState();
-    const setNFT = () => {
+    const navigate = useNavigate();
 
-      setGlobalState({ nft,page:'detail' });
+    const setNFT = () => {
+      setGlobalState({ nft });
+      navigate("/detail");
     };
 
     return (

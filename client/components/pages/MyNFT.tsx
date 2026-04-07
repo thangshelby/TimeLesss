@@ -1,6 +1,6 @@
 import React, { useState, CSSProperties } from "react";
 import CircleLoader from "react-spinners/CircleLoader";
-import Web3 from "web3";
+import { ethers } from "ethers";
 import Card from "../Card";
 const override: CSSProperties = {
   display: "block",
@@ -34,20 +34,21 @@ const SellNFT = () => {
   React.useEffect(() => {
     const getAllNfts = async () => {
       if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
+        const provider = new ethers.BrowserProvider(window.ethereum);
 
-        const NFTContract = new web3.eth.Contract(
+        const NFTContract = new ethers.Contract(
+          "0x5CF3e214FD40F287F6Bf4efAc643CC6f6fF2F16e",
           nftAbi,
-          "0x5CF3e214FD40F287F6Bf4efAc643CC6f6fF2F16e"
+          provider
         );
 
         let tokenId = 1;
 
         try {
           while (true) {
-            let tokenURI = await NFTContract.methods.tokenURI(tokenId).call();
+            let tokenURI = await NFTContract.tokenURI(tokenId);
             const tokenURIString = String(tokenURI);
-            const getOwner = await NFTContract.methods.ownerOf(tokenId).call();
+            const getOwner = await NFTContract.ownerOf(tokenId);
             const owner = String(getOwner).toLowerCase();
           
             if (owner == connectedAccount) {
